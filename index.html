@@ -4,12 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>コメントフォーム</title>
-  <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/9.16.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.16.0/firebase-database.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.16.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.16.0/firebase-database-compat.js"></script>
 </head>
 <body>
-  <h1>コメントフォーム</h1>
   <form id="commentForm">
     <input type="text" id="username" placeholder="名前" required />
     <textarea id="comment" placeholder="コメント" required></textarea>
@@ -19,48 +17,38 @@
   <div id="comments"></div>
 
   <script>
-    // Firebase 設定
-const firebaseConfig = {
-  apiKey: "AIzaSyDFmMvwtSbTiMFgEs7XgyYZE0OLnlqSbuM",
-  authDomain: "line-server-re-write.firebaseapp.com",
-  databaseURL: "https://line-server-re-write-default-rtdb.firebaseio.com",
-  projectId: "line-server-re-write",
-  storageBucket: "line-server-re-write.firebasestorage.app",
-  messagingSenderId: "226476612490",
-  appId: "1:226476612490:web:d31276b4f463b343038673"
-};
+    const firebaseConfig = {
+      apiKey: "AIzaSyDFmMvwtSbTiMFgEs7XgyYZE0OLnlqSbuM",
+      authDomain: "line-server-re-write.firebaseapp.com",
+      databaseURL: "https://line-server-re-write-default-rtdb.firebaseio.com",
+      projectId: "line-server-re-write",
+      storageBucket: "line-server-re-write.firebasestorage.app",
+      messagingSenderId: "226476612490",
+      appId: "1:226476612490:web:d31276b4f463b343038673"
+    };
 
-    // Firebase 初期化
-    const app = firebase.initializeApp(firebaseConfig);
-    const database = firebase.database(app);
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
 
-    // コメント送信処理
     document.getElementById('commentForm').addEventListener('submit', (e) => {
       e.preventDefault();
       const username = document.getElementById('username').value;
       const comment = document.getElementById('comment').value;
-
-      // Realtime Database に保存
       firebase.database().ref('comments').push({
-        username: username,
-        comment: comment,
+        username,
+        comment,
         timestamp: Date.now()
       });
-
-      // フォームをクリア
-      document.getElementById('username').value = '';
-      document.getElementById('comment').value = '';
     });
 
-    // コメント一覧の表示
     firebase.database().ref('comments').on('value', (snapshot) => {
       const commentsDiv = document.getElementById('comments');
-      commentsDiv.innerHTML = ''; // 一旦クリア
-      snapshot.forEach((childSnapshot) => {
-        const commentData = childSnapshot.val();
-        const commentElement = document.createElement('div');
-        commentElement.textContent = `${new Date(commentData.timestamp).toLocaleString()} - ${commentData.username}: ${commentData.comment}`;
-        commentsDiv.appendChild(commentElement);
+      commentsDiv.innerHTML = '';
+      snapshot.forEach((child) => {
+        const data = child.val();
+        const div = document.createElement('div');
+        div.textContent = `${data.username}: ${data.comment}`;
+        commentsDiv.appendChild(div);
       });
     });
   </script>
