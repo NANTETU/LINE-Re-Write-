@@ -22,16 +22,15 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-app.js";
     import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-database.js";
 
-    const firebaseConfig = {
-        apiKey: "AIzaSyA9uhZj0Sr4JYlSaHx2UFNXASCY-zzvz8E",
-        authDomain: "line-dcb90.firebaseapp.com",
-        databaseURL: "https://line-dcb90-default-rtdb.firebaseio.com",
-        projectId: "line-dcb90",
-        storageBucket: "line-dcb90.firebasestorage.app",
-        messagingSenderId: "930933500902",
-        appId: "1:930933500902:web:e62cc15fb3ea996e9e4427"
-    };
-
+const firebaseConfig = {
+  apiKey: "AIzaSyDFmMvwtSbTiMFgEs7XgyYZE0OLnlqSbuM",
+  authDomain: "line-server-re-write.firebaseapp.com",
+  databaseURL: "https://line-server-re-write-default-rtdb.firebaseio.com",
+  projectId: "line-server-re-write",
+  storageBucket: "line-server-re-write.firebasestorage.app",
+  messagingSenderId: "226476612490",
+  appId: "1:226476612490:web:d31276b4f463b343038673"
+};
     const app = initializeApp(firebaseConfig);
     const database = getDatabase(app);
 
