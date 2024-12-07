@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>コメントサイト</title>
+</head>
+<body>
+  <h1>コメントフォーム</h1>
+  <form id="commentForm">
+    <label for="name">名前：</label>
+    <input type="text" id="name" required><br><br>
+    <label for="comment">コメント：</label>
+    <textarea id="comment" required></textarea><br><br>
+    <button type="submit">送信</button>
+  </form>
+
+  <h2>コメント一覧</h2>
+  <div id="comments"></div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-app.js";
+    import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-database.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyA9uhZj0Sr4JYlSaHx2UFNXASCY-zzvz8E",
+        authDomain: "line-dcb90.firebaseapp.com",
+        databaseURL: "https://line-dcb90-default-rtdb.firebaseio.com",
+        projectId: "line-dcb90",
+        storageBucket: "line-dcb90.firebasestorage.app",
+        messagingSenderId: "930933500902",
+        appId: "1:930933500902:web:e62cc15fb3ea996e9e4427"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const database = getDatabase(app);
+
+    const form = document.getElementById('commentForm');
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const name = document.getElementById('name').value;
+      const comment = document.getElementById('comment').value;
+
+      push(ref(database, 'comments'), { name, comment });
+      form.reset();
+    });
+
+    const commentsDiv = document.getElementById('comments');
+    const commentsRef = ref(database, 'comments');
+    onValue(commentsRef, (snapshot) => {
+      commentsDiv.innerHTML = '';
+      snapshot.forEach((childSnapshot) => {
+        const data = childSnapshot.val();
+        commentsDiv.innerHTML += `<p><strong>${data.name}:</strong> ${data.comment}</p>`;
+      });
+    });
+  </script>
+</body>
+</html>
